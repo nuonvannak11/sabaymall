@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Local English font declaration */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Local Khmer font declaration */
+@font-face {
+  font-family: 'Khmer OS Battambang';
+  src: url('/fonts/Khmer OS Battambang Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom styles to match the design */
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #F8F7F4;
+}
+
+/* Khmer font support with fallbacks */
+[lang="kh"] {
+  font-family: 'Khmer OS Battambang', 'Khmer OS', 'Khmer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.font-khmer {
+  font-family: 'Khmer OS Battambang', 'Khmer OS', 'Khmer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Language-specific font classes */
+.lang-en {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.lang-kh {
+  font-family: 'Khmer OS Battambang', 'Khmer OS', 'Khmer', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.text-brand-red {
+  color: #EF4444;
+}
+
+.bg-brand-red {
+  background-color: #EF4444;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #E64A45;
+  color: white;
+  box-shadow: 0 4px 14px rgba(230, 74, 69, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #d93a35;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #1a1a1a;
+}
+
+.food-card {
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.food-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Swiper Custom Styles */
+.hero-swiper {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background-color: #EF4444 !important;
+  color: white !important;
+  transform: scale(1.1);
+}
+
+.swiper-pagination-bullet {
+  background-color: white !important;
+  opacity: 0.6;
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 6px !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  background-color: #EF4444 !important;
+  transform: scale(1.2);
+}
+
+/* Fade effect improvements */
+.swiper-slide {
+  transition: opacity 0.6s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 16px !important;
+  }
+}
+
+html.light {
+  --footer-bg: #f3f4f6; /* light gray */
+  --footer-text: #1f2937; /* dark text */
+}
+
+html.dark {
+  --footer-bg: #111827; /* dark gray */
+  --footer-text: #f3f4f6; /* light text */
+} 

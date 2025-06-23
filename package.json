@@ -9,11 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^14.0.4",
+    "axios": "^1.10.0",
+    "i18next": "^25.2.1",
+    "i18next-resources-to-backend": "^1.2.1",
     "next": "14.0.4",
-    "next-intl": "^3.5.4",
+    "next-i18n-router": "^5.5.2",
+    "next-intl": "^4.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-i18next": "^15.5.3",
+    "react-toastify": "^11.0.5",
     "swiper": "^11.2.8"
   },
   "devDependencies": {
