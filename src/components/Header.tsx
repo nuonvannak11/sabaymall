@@ -88,7 +88,9 @@ export default function Header() {
   return (
     <header className="dark:text-t-text py-6 flex justify-between items-center relative">
       <div className="flex items-center gap-4">
-        <Link href="/" className="w-full flex justify-center">
+        <Link
+          href="/"
+          className="dark:text-pink-400 w-full flex justify-center">
           <h1 className="font-bold">Sabay Mall</h1>
         </Link>
       </div>
@@ -121,7 +123,7 @@ export default function Header() {
             onClick={toggleSearch}
             className={`p-2 rounded-full transition-all duration-300 ${
               isSearchOpen
-                ? "bg-brand-red text-white shadow-lg"
+                ? " text-white shadow-lg"
                 : "text-gray-500 hover:text-brand-red hover:bg-gray-100"
             }`}>
             <i className="dark:text-white fa-solid fa-magnifying-glass text-xl"></i>
@@ -139,7 +141,7 @@ export default function Header() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search products..."
-                className="w-64 px-4 py-2 pr-12 bg-white border-2 border-gray-200 rounded-full focus:outline-none focus:border-brand-red shadow-lg text-sm"
+                className="dark:bg-b-normal dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f] w-48 sm:w-64 px-4 py-2 pr-12 bg-white border border-gray-200 rounded-full focus:outline-none shadow-lg text-sm"
               />
               <button
                 type="submit"
@@ -241,7 +243,7 @@ export default function Header() {
       {/* Mobile Menu Sidebar */}
       <div
         ref={menuRef}
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
+        className={`dark:bg-b-bg fixed top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}>
         <div className="p-6 flex flex-col h-full">
@@ -266,30 +268,35 @@ export default function Header() {
             </button>
           </div>
 
-          <nav className="flex flex-col space-y-4 flex-grow">
+          <nav className="dark:text-white text-gray-500 flex flex-col space-y-4 flex-grow">
             <Link
               href="/"
-              className="text-gray-800 hover:text-brand-red font-semibold py-2 border-b border-gray-100">
+              className=" hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-house"></i>
               {t("Home")}
             </Link>
             <Link
               href="/clothes"
-              className="text-gray-500 hover:text-brand-red py-2 border-b border-gray-100">
+              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-shirt"></i>
               {t("Cloths")}
             </Link>
             <Link
               href="/incense"
-              className="text-gray-500 hover:text-brand-red py-2 border-b border-gray-100">
+              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-fire"></i>
               {t("Incense")}
             </Link>
             <Link
               href="/electronics"
-              className="text-gray-500 hover:text-brand-red py-2 border-b border-gray-100">
+              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-tv"></i>
               {t("Electronics")}
             </Link>
             <Link
               href="/contact"
-              className="text-gray-500 hover:text-brand-red py-2 border-b border-gray-100">
+              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-envelope"></i>
               {t("Contact")}
             </Link>
           </nav>
