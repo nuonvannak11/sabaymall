@@ -57,7 +57,6 @@ export default function LanguageSwitcher() {
     };
   }, []);
 
-  // Check position when opening dropdown
   const handleToggle = () => {
     if (!isOpen) {
       checkPosition();
@@ -81,12 +80,12 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Current Language Button */}
       <button
         ref={buttonRef}
         onClick={handleToggle}
-        className="flex items-center justify-center w-12 h-10 rounded-lg border-2 border-gray-300 bg-white text-gray-600 hover:border-brand-red hover:text-brand-red transition-all duration-200"
-        title={currentLanguage.code === "en" ? "English" : "ខ្មែរ"}>
+        className="dark:bg-b-normal dark:text-white flex items-center justify-center w-12 h-10 rounded-lg border-2 border-gray-300 bg-white text-gray-600 hover:border-brand-red hover:text-brand-red transition-all duration-200 dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
+        title={currentLanguage.code === "en" ? "English" : "ខ្មែរ"}
+      >
         <Image
           src={currentLanguage.flag}
           alt={`${currentLanguage.name} flag`}
@@ -102,7 +101,8 @@ export default function LanguageSwitcher() {
         <div
           className={`absolute bg-white border border-gray-300 rounded-lg shadow-lg z-50 min-w-[120px] ${
             dropdownPosition === "top" ? "bottom-full mb-1" : "top-full mt-1"
-          }`}>
+          }`}
+        >
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -116,7 +116,8 @@ export default function LanguageSwitcher() {
                   ? "rounded-b-lg"
                   : ""
               }`}
-              disabled={currentLocale === lang.code}>
+              disabled={currentLocale === lang.code}
+            >
               <Image
                 src={lang.flag}
                 alt={`${lang.name} flag`}

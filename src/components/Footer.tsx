@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="w-full py-6 px-2 sm:px-4  dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-800 transition-colors duration-300">
       <div className="w-full flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-center md:text-left">
         <div className="flex flex-col md:flex-row items-center gap-2">
-          <span className="dark:text-white text-gray-800">{t("Phone Number")}0964423081</span>
+          <span className="dark:text-white text-gray-800">{t("Phone Number")}: 0964423081</span>
           <a
             target="_blank"
             href="#"

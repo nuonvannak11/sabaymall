@@ -248,7 +248,7 @@ export default function Header() {
         }`}>
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="font-bold text-xl">Sabay Mall</h2>
+            <h2 className="dark:text-pink-400 font-bold text-xl">Sabay Mall</h2>
             <button
               onClick={toggleMenu}
               className="p-2 rounded-full hover:bg-gray-100">
@@ -271,32 +271,32 @@ export default function Header() {
           <nav className="dark:text-white text-gray-500 flex flex-col space-y-4 flex-grow">
             <Link
               href="/"
-              className="hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
-              <i className="fa-solid fa-house"></i>
+              className="dark:border-none hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-house w-5 h-5"></i>
               {t("Home")}
             </Link>
             <Link
               href="/clothes"
-              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
-              <i className="fa-solid fa-shirt"></i>
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-shirt w-5 h-5"></i>
               {t("Cloths")}
             </Link>
             <Link
               href="/incense"
-              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
-              <i className="fa-solid fa-fire"></i>
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-fire w-5 h-5"></i>
               {t("Incense")}
             </Link>
             <Link
               href="/electronics"
-              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
-              <i className="fa-solid fa-tv"></i>
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-tv w-5 h-5"></i>
               {t("Electronics")}
             </Link>
             <Link
               href="/contact"
-              className="hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
-              <i className="fa-solid fa-envelope"></i>
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
+              <i className="fa-solid fa-envelope w-5 h-5"></i>
               {t("Contact")}
             </Link>
           </nav>
