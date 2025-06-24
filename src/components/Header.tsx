@@ -271,7 +271,7 @@ export default function Header() {
           <nav className="dark:text-white text-gray-500 flex flex-col space-y-4 flex-grow">
             <Link
               href="/"
-              className=" hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
+              className="hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-house"></i>
               {t("Home")}
             </Link>
