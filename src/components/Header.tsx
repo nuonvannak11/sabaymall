@@ -140,13 +140,13 @@ export default function Header() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products..."
+                placeholder={t("Search products...")}
                 className="dark:bg-b-normal dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f] w-48 sm:w-64 px-4 py-2 pr-12 bg-white border border-gray-200 rounded-full focus:outline-none shadow-lg text-sm"
               />
               <button
                 type="submit"
                 className="absolute right-2 p-1 text-brand-red hover:text-brand-red-dark transition-colors">
-                <i className="fa-solid fa-magnifying-glass text-lg"></i>
+                <i className="mt-[8px] fa-solid fa-magnifying-glass text-lg"></i>
               </button>
             </form>
           </div>
