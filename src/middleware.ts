@@ -59,6 +59,7 @@ export function middleware(request: NextRequest) {
     }
     ipMap.set(ip, entry);
   }
+  
   // Skip Next.js internals, API routes, and all files in public (by extension)
   if (
     pathname.startsWith("/_next") ||

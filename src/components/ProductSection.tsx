@@ -2,16 +2,13 @@
 
 import { useTranslation } from "react-i18next";
 import ItemCard from "@/components/ItemCard";
+import { ProductProps } from "@/types/index";
 
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  img: string;
-}
-
-export default function ProductSection({ products }: { products: Product[] }) {
+export default function ProductSection({
+  products,
+}: {
+  products: ProductProps[];
+}) {
   const { t } = useTranslation();
   if (!products || products.length === 0) {
     return (
@@ -26,6 +23,8 @@ export default function ProductSection({ products }: { products: Product[] }) {
         {products.map((item) => (
           <ItemCard
             key={item.id}
+            id={item.id}
+            status={item.status}
             name={t(`${item.name}`)}
             category={t(`${item.category}`)}
             price={String(item.price)}
@@ -33,12 +32,6 @@ export default function ProductSection({ products }: { products: Product[] }) {
             imageAlt={item.name}
           />
         ))}
-      </div>
-
-      <div className="text-center mt-16">
-        <a href="#" className="btn btn-primary px-8">
-          {t("exploreMore")}
-        </a>
       </div>
     </section>
   );
