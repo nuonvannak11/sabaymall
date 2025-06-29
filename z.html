@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add to Cart Button | Tailwind CSS Version</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // This script is not strictly necessary for the button's appearance,
+    // but it demonstrates how you could handle theme switching if you
+    // wanted to go beyond the prefers-color-scheme media query.
+    tailwind.config = {
+      darkMode: "media", // or 'class'
+      theme: {
+        extend: {
+          boxShadow: {
+            "glow-dark": "0 0 15px rgba(255, 255, 255, 0.15)",
+            "glow-dark-hover": "0 0 25px rgba(255, 255, 255, 0.15)",
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gray-100 dark:bg-zinc-900 transition-colors duration-300 ease-in-out font-sans">
+  <button class="inline-flex items-center bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-black dark:text-white rounded-full p-1.5 cursor-pointer shadow-none dark:shadow-glow-dark hover:dark:shadow-glow-dark-hover transition-all duration-300 ease-in-out">
+    <span class="flex items-center justify-center w-10 h-10 bg-black dark:bg-white rounded-full">
+      <svg class="w-5 h-5 text-white dark:text-black" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+    </span>
+    <span class="pl-4 pr-6 text-base font-bold tracking-wider">
+      Add to cart
+    </span>
+  </button>
+</body>
+
+</html>
