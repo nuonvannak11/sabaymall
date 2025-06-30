@@ -1,9 +1,6 @@
-import { products } from '@/actions/data/products';
-
-// Helper to generate new unique IDs
-function getNextId() {
-  return products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-}
+import { products } from "@/actions/models/products";
+import { ProductProps } from "@/types";
+import { getNextId } from "@/utils";
 
 export const productController = {
   // Get product by ID, optionally filter by category
@@ -32,10 +29,10 @@ export const productController = {
   },
 
   // Insert a new product
-  insertProduct(product: any) {
-    const newProduct = {
+  insertProduct(product: Omit<ProductProps, "id" | "createdAt">) {
+    const newProduct: ProductProps = {
       ...product,
-      id: getNextId(),
+      id: getNextId(products),
       createdAt: new Date().toISOString(),
     };
     products.push(newProduct);
@@ -64,5 +61,5 @@ export const productController = {
     if (index === -1) return false;
     products.splice(index, 1);
     return true;
-  }
+  },
 };

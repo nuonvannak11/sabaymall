@@ -1,14 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import dynamic from "next/dynamic";
+import LanguageSwitcher from "@/components/button/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getThemeFromCookie } from "@/utils/index";
 import Image from "next/image";
 
-export default function Header() {
+interface HeaderProps {
+  action: () => void;
+}
+
+export default function Header({ action }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +25,7 @@ export default function Header() {
   const router = useRouter();
   const [theme, setTheme] = useState(getThemeFromCookie());
   const [mounted, setMounted] = useState(false);
-  const username = "ter";
+  const username = "";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -205,13 +210,12 @@ export default function Header() {
             />
           </Link>
         ) : (
-          <Link
-            href="/login"
-            className="ml-2 px-4 py-1 rounded-3xl bg-brand-red text-white font-semibold hover:bg-brand-red-dark transition">
+          <button
+            className="ml-2 px-4 py-1 rounded-3xl bg-brand-red text-white font-semibold hover:bg-brand-red-dark transition"
+            onClick={() => action()}>
             {t("Login")}
-          </Link>
+          </button>
         )}
-
         {/* Mobile Menu Button */}
         <button
           ref={buttonRef}

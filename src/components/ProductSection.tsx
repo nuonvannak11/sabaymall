@@ -28,6 +28,7 @@ export default function ProductSection({
             name={t(`${item.name}`)}
             category={t(`${item.category}`)}
             price={String(item.price)}
+            total={item.total}
             imageSrc={item.img}
             imageAlt={item.name}
           />

@@ -1,8 +1,5 @@
-import { sliders } from '@/actions/data/sliders';
-
-function getNextId() {
-  return sliders.length ? Math.max(...sliders.map(s => s.id)) + 1 : 1;
-}
+import { sliders } from '@/actions/models/sliders';
+import { getNextId } from '@/utils';
 
 export const sliderController = {
   // Get all sliders in a specific category

@@ -1,7 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import { getToken } from "next-auth/jwt";
 
-// List of dangerous extensions to block
+// 1. File block extensions
 const BLOCKED_EXTENSIONS = [
   ".exe",
   ".sh",
@@ -17,39 +19,47 @@ const BLOCKED_EXTENSIONS = [
   ".rb",
 ];
 
-// Simple in-memory rate limiter
 const RATE_LIMIT = 100;
 const WINDOW_MS = 60 * 1000;
 const ipMap = new Map<string, { count: number; start: number }>();
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const now = Date.now();
 
-  // Block dangerous file extensions
   if (BLOCKED_EXTENSIONS.some((ext) => pathname.toLowerCase().endsWith(ext))) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 
+  if (pathname === "/middleware-example") {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
+
   if (pathname.startsWith("/api")) {
-    const allowedIp = "123.123.123.123";
-    const ip =
-      request.ip ?? request.headers.get("x-forwarded-for") ?? "unknown";
-    if (ip !== allowedIp && ip !== "127.0.0.1" && ip !== "::1") {
+    const allowedIp = "123.123.123.123"; // adjust this
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown";
+
+    if (!["127.0.0.1", "::1", allowedIp].includes(ip)) {
       return new NextResponse("Forbidden", { status: 403 });
     }
 
-    // --- Clean up old IP entries ---
-    for (const [ip, entry] of Array.from(ipMap.entries())) {
-      if (now - entry.start > WINDOW_MS) {
-        ipMap.delete(ip);
-      }
+    for (const entry of ipMap.entries()) {
+      const ipKey = entry[0];
+      const value = entry[1];
+      if (now - value.start > WINDOW_MS) ipMap.delete(ipKey);
     }
 
-    // --- Rate limiting ---
     const entry = ipMap.get(ip) || { count: 0, start: now };
+
     if (now - entry.start < WINDOW_MS) {
-      entry.count += 1;
+      entry.count++;
       if (entry.count > RATE_LIMIT) {
         return new NextResponse("Too Many Requests", { status: 429 });
       }
@@ -57,10 +67,10 @@ export function middleware(request: NextRequest) {
       entry.count = 1;
       entry.start = now;
     }
+
     ipMap.set(ip, entry);
   }
-  
-  // Skip Next.js internals, API routes, and all files in public (by extension)
+
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -69,17 +79,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const lang = cookies().get("lang")?.value || "kh"; // Default to 'kh' if no cookie
-
-  // Extract locale from the path
+  const lang = (await cookies()).get("lang")?.value || "kh";
   const match = pathname.match(/^\/(en|kh)(\/|$)/);
   const locale = match ? match[1] : lang;
 
-  // If path does not start with /en or /kh, redirect to /en
   if (!/^\/(en|kh)(\/|$)/.test(pathname)) {
-    return NextResponse.redirect(
-      new URL(`/${locale}/${pathname}`, request.url)
-    );
+    return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
   }
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: "/((?!api|static|.*\\..*|_next).*)",
+};

@@ -5,6 +5,8 @@ import { DefLayoutProps } from "@/types";
 import initTranslations from "@/i18n";
 import { ToastContainer } from "react-toastify";
 import { cookies } from "next/headers";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -26,7 +28,9 @@ export default async function RootLayout({
 }: Readonly<DefLayoutProps>) {
   const { locale } = await params;
   const { resources } = await initTranslations(locale);
-  const theme = cookies().get("theme")?.value || "";
+  const theme = (await cookies()).get("theme")?.value || "";
+  const session = await auth();
+  console.log("Session:", session);
 
   return (
     <html lang={locale} className={`${theme}`}>
@@ -37,10 +41,12 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${locale === "kh" ? "font-khmer" : "font-montserrat"}`}>
-        <TranslationsProvider locale={locale} resources={resources}>
-          {children}
-          <ToastContainer />
-        </TranslationsProvider>
+        <SessionProvider session={session}>
+          <TranslationsProvider locale={locale} resources={resources}>
+            {children}
+            <ToastContainer />
+          </TranslationsProvider>
+        </SessionProvider>
       </body>
     </html>
   );
