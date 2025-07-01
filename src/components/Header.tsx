@@ -1,33 +1,42 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import dynamic from "next/dynamic";
-import LanguageSwitcher from "@/components/button/LanguageSwitcher";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getThemeFromCookie } from "@/utils/index";
+import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import _ from "lodash";
+
+const LanguageSwitcher = dynamic(
+  () => import("@/components/button/LanguageSwitcher"),
+  {
+    ssr: false,
+  }
+);
+const Theme = dynamic(() => import("@/components/button/Theme"), {
+  ssr: false,
+});
 
 interface HeaderProps {
-  action: () => void;
+  action?: () => void;
 }
 
 export default function Header({ action }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const menuRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const searchRef = React.useRef<HTMLDivElement>(null);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
   const { t } = useTranslation();
   const router = useRouter();
-  const [theme, setTheme] = useState(getThemeFromCookie());
-  const [mounted, setMounted] = useState(false);
-  const username = "";
+  const { data: session } = useSession();
+  const user = session?.user;
 
-  useEffect(() => {
+  React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         menuRef.current &&
@@ -52,8 +61,7 @@ export default function Header({ action }: HeaderProps) {
     };
   }, []);
 
-  // Focus input when search opens
-  useEffect(() => {
+  React.useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
@@ -62,10 +70,6 @@ export default function Header({ action }: HeaderProps) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -79,15 +83,6 @@ export default function Header({ action }: HeaderProps) {
     if (!searchQuery.trim()) return;
     router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     setIsSearchOpen(false);
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    document.documentElement.classList.remove("light");
-    document.documentElement.classList.remove("dark");
-    document.documentElement.classList.add(newTheme);
-    document.cookie = `theme=${newTheme}; path=/; max-age=31536000`;
   };
 
   return (
@@ -122,7 +117,6 @@ export default function Header({ action }: HeaderProps) {
       </nav>
 
       <div className="flex items-center space-x-4">
-        {/* Search Container */}
         <div className="relative" ref={searchRef}>
           <button
             onClick={toggleSearch}
@@ -156,55 +150,21 @@ export default function Header({ action }: HeaderProps) {
             </form>
           </div>
         </div>
-
-        {/* Dark/Light Mode Toggle Button */}
-        {mounted && (
-          <button
-            onClick={toggleTheme}
-            className="p-[5px] rounded-full border border-gray-300 bg-white dark:bg-b-normal text-gray-600 dark:text-yellow-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
-            title={
-              theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-            }>
-            {theme === "dark" ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m16.66 4.95l-.71-.71M4.05 4.05l-.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"
-                />
-              </svg>
-            )}
-          </button>
-        )}
-
-        {username ? (
+        <div className="flex items-center justify-center flex-row">
+          <Theme />
+        </div>
+        {user && !_.isEmpty(user) ? (
           <Link
-            href="/profile"
+            href="/center"
             className="flex items-center ml-2 group rounded-full dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]">
             <Image
               width="30"
               height="30"
-              src="/assets/users/images.jpg"
+              src={
+                user?.image && user.image !== "null"
+                  ? `/assets/users/${user.image}`
+                  : "/assets/users/images.jpg"
+              }
               alt="User Avatar"
               className="w-[32px] h-[32px] rounded-full border border-gray-300 group-hover:border-brand-red transition-all"
             />
@@ -212,7 +172,7 @@ export default function Header({ action }: HeaderProps) {
         ) : (
           <button
             className="ml-2 px-4 py-1 rounded-3xl bg-brand-red text-white font-semibold hover:bg-brand-red-dark transition"
-            onClick={() => action()}>
+            onClick={() => action?.()}>
             {t("Login")}
           </button>
         )}
@@ -239,12 +199,9 @@ export default function Header({ action }: HeaderProps) {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
       )}
-
-      {/* Mobile Menu Sidebar */}
       <div
         ref={menuRef}
         className={`dark:bg-b-bg fixed top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
@@ -304,8 +261,6 @@ export default function Header({ action }: HeaderProps) {
               {t("Contact")}
             </Link>
           </nav>
-
-          {/* Language Switcher at bottom */}
           <div className="mt-auto pt-4 border-t border-gray-100">
             <LanguageSwitcher />
           </div>

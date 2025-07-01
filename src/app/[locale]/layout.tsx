@@ -9,8 +9,8 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
-  title: "Shop",
-  description: "Shop",
+  title: "Sabay Mall",
+  description: "Your one-stop online shopping destination",
 };
 
 export const viewport = {
@@ -30,7 +30,6 @@ export default async function RootLayout({
   const { resources } = await initTranslations(locale);
   const theme = (await cookies()).get("theme")?.value || "";
   const session = await auth();
-  console.log("Session:", session);
 
   return (
     <html lang={locale} className={`${theme}`}>
