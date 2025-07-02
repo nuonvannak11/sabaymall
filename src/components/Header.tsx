@@ -122,8 +122,8 @@ export default function Header({ action }: HeaderProps) {
             onClick={toggleSearch}
             className={`p-2 rounded-full transition-all duration-300 ${
               isSearchOpen
-                ? " text-white shadow-lg"
-                : "text-gray-500 hover:text-brand-red hover:bg-gray-100"
+                ? " text-white"
+                : "text-gray-500 hover:text-brand-red"
             }`}>
             <i className="dark:text-white fa-solid fa-magnifying-glass text-xl"></i>
           </button>

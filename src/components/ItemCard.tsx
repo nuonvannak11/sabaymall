@@ -18,7 +18,7 @@ export default function ItemCard({
   };
 
   return (
-    <div className="food-card mb-5 dark:bg-b-normal dark:text-t-text">
+    <div className="food-card mb-5 dark:bg-b-normal dark:text-t-text cursor-pointer">
       <img
         src={imageSrc}
         alt={imageAlt}
