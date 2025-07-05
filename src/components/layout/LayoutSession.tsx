@@ -1,13 +1,13 @@
 import React from "react";
 import { useSession } from "next-auth/react";
-import _ from "lodash";
+import isEmpty from "lodash/isEmpty";
 import { redirect } from "next/navigation";
 import Header from "@/components/Header";
 
 export default function LayoutSession() {
   const { data: session } = useSession();
   const user = session?.user;
-  if (!user || _.isEmpty(user)) {
+  if (!user || isEmpty(user)) {
     redirect("/");
   }
 
