@@ -74,9 +74,11 @@ export interface LayoutProps {
   products: ProductProps[];
 }
 
-export interface LoginProps {
-  open: boolean;
-  onClose: () => void;
-}
-
 export type WithId = { id: number };
+
+export interface LoginResult {
+  code: number;
+  message: string;
+  type?: string;
+  user?: UserProps;
+}

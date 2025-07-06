@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 import { userController } from "./actions/controller/user_controller";
+import { decrypt } from "@/utils/index";
+import count from "universal-counter";
 
 const CredentialsSchema = z.object({
   phone: z.string().min(1, "Phone is required"),
@@ -32,8 +34,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const { phone, password } = parsedCredentials.data;
         const user = await userController.getUserByPhone(phone);
-
-        if (!user || user.password !== password) {
+        const isEncrypted = count(decrypt(password));
+        if (
+          !user ||
+          user.password !== (isEncrypted > 0 ? decrypt(password) : password)
+        ) {
           throw new InvalidCredentialsError();
         }
 

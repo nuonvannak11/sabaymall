@@ -1,9 +1,11 @@
-import { signIn } from "@/auth";
 import { eLog, toJSON } from "@/lib/utls";
 import { UserProps } from "@/types";
 import { getNextId } from "@/utils";
 import { users as usersData } from "@/actions/models/users";
 import _, { cloneDeep } from "lodash";
+import { encrypt, decrypt } from "@/utils";
+import count from "universal-counter";
+import isEmpty from "lodash/isEmpty";
 
 const users: UserProps[] = usersData;
 
@@ -54,34 +56,41 @@ export const userController = {
     let user;
     try {
       const phone = formData.get("phone");
-      const password = formData.get("password");
+      const passwordValue = formData.get("password");
+      const password = typeof passwordValue === "string" ? passwordValue : "";
       const phonePattern = /^\d{9,12}$/;
-
+      const isEncrypted = count(decrypt(password));
+   
       if (typeof phone !== "string" || _.isEmpty(phone)) {
-        return { code: 0, message: "Phone is required" };
+        return { code: 0, message: "Phone is required", type: "phone" };
       } else if (!phonePattern.test(phone)) {
-        return { code: 0, message: "Phone number is invalid" };
+        return { code: 0, message: "Phone number is invalid", type: "phone" };
       } else if (typeof password !== "string" || _.isEmpty(password)) {
-        return { code: 0, message: "Password is required" };
+        return { code: 0, message: "Password is required", type: "password" };
       }
 
       user = await userController.getUserByPhone(phone);
       if (_.isEmpty(user)) {
-        return { code: 0, message: "Phone number is not found" };
-      } else if (user.password !== password) {
-        return { code: 0, message: "Password is incorrect" };
+        return { code: 0, message: "Phone number is not found", type: "phone" };
+      } else if (
+        user.password !== (isEncrypted > 0 ? decrypt(password) : password)
+      ) {
+        return { code: 0, message: "Password is incorrect", type: "password" };
       }
     } catch (error) {
       eLog(error);
-      return { code: 0, message: "An error occurred" };
+      return { code: 0, message: "An error occurred", type: "error" };
     }
 
     const data = cloneDeep(toJSON(user));
-
-    await signIn("credentials", {
-      ...data,
-      redirect: true,
-      redirectTo: "/",
-    });
+    if (data.password) {
+      data.password = encrypt(data.password);
+    }
+    console.log(data);
+    return {
+      code: 1,
+      message: "Login successful",
+      user: data,
+    };
   },
 };

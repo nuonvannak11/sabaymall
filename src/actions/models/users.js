@@ -4,7 +4,7 @@ export const users = [
     name: "John Doe",
     email: "john@example.com",
     phone: "0123456789",
-    img: "john.jpg",
+    img: "john.avif",
     address: "123 Main St, Phnom Penh, Cambodia",
     password: "hashedpassword1",
     role: "customer",

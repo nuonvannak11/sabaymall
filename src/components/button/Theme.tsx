@@ -17,7 +17,7 @@ export default function Theme() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-[5px] rounded-full border border-gray-300 bg-white dark:bg-b-normal text-gray-600 dark:text-yellow-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
+      className="p-[6px] rounded-full border border-gray-300 bg-white dark:bg-b-normal text-gray-600 dark:text-yellow-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
       title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
       {theme === "dark" ? (
         <svg

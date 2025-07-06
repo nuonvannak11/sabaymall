@@ -6,6 +6,7 @@ import initTranslations from "@/i18n";
 import { ToastContainer } from "react-toastify";
 import { cookies } from "next/headers";
 import { SessionProvider } from "next-auth/react";
+import { ActionProvider } from "@/contexts/ActionContext";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = {
@@ -42,8 +43,10 @@ export default async function RootLayout({
       <body className={`${locale === "kh" ? "font-khmer" : "font-montserrat"}`}>
         <SessionProvider session={session}>
           <TranslationsProvider locale={locale} resources={resources}>
-            {children}
-            <ToastContainer />
+            <ActionProvider>
+              {children}
+              <ToastContainer />
+            </ActionProvider>
           </TranslationsProvider>
         </SessionProvider>
       </body>
