@@ -9,12 +9,6 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
-  }
-}
-
 export type DefLayoutProps = {
   children?: React.ReactNode;
   params: Promise<Record<string, string> & { locale: string }>;
@@ -82,3 +76,18 @@ export interface LoginResult {
   type?: string;
   user?: UserProps;
 }
+
+export type BlacklistIpProps = {
+  id: number;
+  ip: string;
+  country?: string;
+  blocked_requests?: number;
+  reason: string;
+  user_agent?: string;
+  createdAt: string;
+};
+
+export type RateLimitResult = {
+  success: boolean;
+  message: string;
+};

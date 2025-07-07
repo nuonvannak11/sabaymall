@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { z } from "zod";
 import { userController } from "./actions/controller/user_controller";
-import { decrypt } from "@/utils/index";
+import { decrypt } from "@/func";
 import count from "universal-counter";
 
 const CredentialsSchema = z.object({

@@ -88,16 +88,14 @@ export default function Header() {
       <div className="flex items-center gap-4">
         <Link
           href="/"
-          className="dark:text-pink-400 w-full flex justify-center"
-        >
+          className="dark:text-pink-400 w-full flex justify-center">
           <h1 className="font-bold">Sabay Mall</h1>
         </Link>
       </div>
       <nav className="hidden md:flex items-center space-x-8">
         <Link
           href="/"
-          className="text-gray-800 hover:text-brand-red font-semibold"
-        >
+          className="text-gray-800 hover:text-brand-red font-semibold">
           {t("Home")}
         </Link>
         <Link href="/clothes" className="text-gray-500 hover:text-brand-red">
@@ -108,8 +106,7 @@ export default function Header() {
         </Link>
         <Link
           href="/electronics"
-          className="text-gray-500 hover:text-brand-red"
-        >
+          className="text-gray-500 hover:text-brand-red">
           {t("Electronics")}
         </Link>
         <Link href="/contact" className="text-gray-500 hover:text-brand-red">
@@ -125,8 +122,7 @@ export default function Header() {
               isSearchOpen
                 ? " text-white"
                 : "text-gray-500 hover:text-brand-red"
-            }`}
-          >
+            }`}>
             <i className="dark:text-white fa-solid fa-magnifying-glass text-xl"></i>
           </button>
           <div
@@ -134,8 +130,7 @@ export default function Header() {
               isSearchOpen
                 ? "opacity-100 translate-x-0"
                 : "opacity-0 translate-x-4 pointer-events-none"
-            }`}
-          >
+            }`}>
             <form onSubmit={handleSearch} className="flex items-center">
               <input
                 ref={searchInputRef}
@@ -147,8 +142,7 @@ export default function Header() {
               />
               <button
                 type="submit"
-                className="absolute right-2 p-1 text-brand-red hover:text-brand-red-dark transition-colors"
-              >
+                className="absolute right-2 p-1 text-brand-red hover:text-brand-red-dark transition-colors">
                 <i className="mt-[8px] fa-solid fa-magnifying-glass text-lg"></i>
               </button>
             </form>
@@ -160,8 +154,7 @@ export default function Header() {
         {user && !isEmpty(user) ? (
           <Link
             href="/center"
-            className="flex items-center ml-2 group rounded-full dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
-          >
+            className="flex items-center ml-2 group rounded-full dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]">
             <Image
               width="40"
               height="40"
@@ -176,13 +169,10 @@ export default function Header() {
           </Link>
         ) : (
           <button
-            className="ml-2 px-4 py-1 rounded-3xl bg-brand-red text-white font-semibold hover:bg-brand-red-dark transition"
+            className="ml-2 px-4 py-[6px] rounded-3xl bg-brand-red text-white font-semibold hover:bg-brand-red-dark transition"
             onClick={() => {
-              console.log("Login button clicked!");
-              console.log("onLoginClick exists:", !!onLoginClick);
               onLoginClick?.();
-            }}
-          >
+            }}>
             {t("Login")}
           </button>
         )}
@@ -190,8 +180,7 @@ export default function Header() {
         <button
           ref={buttonRef}
           onClick={toggleMenu}
-          className="bg-white dark:bg-b-normal p-[5px] rounded-full shadow-sm md:hidden z-50 dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]"
-        >
+          className="bg-white dark:bg-b-normal p-[5px] rounded-full shadow-sm md:hidden z-50 dark:border-sky-100 dark:shadow-[0_0_2px_#fff,inset_0_0_2px_#fff,0_0_5px_#08f,0_0_7px_#08f,0_0_7px_#08f]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -202,8 +191,7 @@ export default function Header() {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="feather feather-menu"
-          >
+            className="feather feather-menu">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -218,15 +206,13 @@ export default function Header() {
         ref={menuRef}
         className={`dark:bg-b-bg fixed top-0 left-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
+        }`}>
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-center mb-8">
             <h2 className="dark:text-pink-400 font-bold text-xl">Sabay Mall</h2>
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-full hover:bg-gray-100"
-            >
+              className="p-2 rounded-full hover:bg-gray-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -236,8 +222,7 @@ export default function Header() {
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+                strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
@@ -247,36 +232,31 @@ export default function Header() {
           <nav className="dark:text-white text-gray-500 flex flex-col space-y-4 flex-grow">
             <Link
               href="/"
-              className="dark:border-none hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2"
-            >
+              className="dark:border-none hover:text-brand-red font-semibold py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-house w-5 h-5"></i>
               {t("Home")}
             </Link>
             <Link
               href="/clothes"
-              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2"
-            >
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-shirt w-5 h-5"></i>
               {t("Cloths")}
             </Link>
             <Link
               href="/incense"
-              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2"
-            >
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-fire w-5 h-5"></i>
               {t("Incense")}
             </Link>
             <Link
               href="/electronics"
-              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2"
-            >
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-tv w-5 h-5"></i>
               {t("Electronics")}
             </Link>
             <Link
               href="/contact"
-              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2"
-            >
+              className="dark:border-none hover:text-brand-red py-2 border-b border-gray-100 flex items-center gap-2">
               <i className="fa-solid fa-envelope w-5 h-5"></i>
               {t("Contact")}
             </Link>

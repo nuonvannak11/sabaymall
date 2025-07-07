@@ -3,7 +3,7 @@ import { UserProps } from "@/types";
 import { getNextId } from "@/utils";
 import { users as usersData } from "@/actions/models/users";
 import _, { cloneDeep } from "lodash";
-import { encrypt, decrypt } from "@/utils";
+import { encrypt, decrypt } from "@/func";
 import count from "universal-counter";
 import isEmpty from "lodash/isEmpty";
 
@@ -16,15 +16,18 @@ export const userController = {
   async getUserByName(name: string) {
     return users.find((p: UserProps) => p.name === name) || null;
   },
+
   async getUserByEmail(email: string) {
     return users.find((p: UserProps) => p.email === email) || null;
   },
   async getUserByPhone(phone: string) {
     return users.find((p: UserProps) => p.phone === phone) || null;
   },
+
   async getAllUsers() {
     return [...users];
   },
+
   async insertUser(user: Omit<UserProps, "id" | "createdAt">) {
     const newId = getNextId(users);
     const newUser: UserProps = {

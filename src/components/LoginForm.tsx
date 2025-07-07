@@ -8,6 +8,7 @@ import count from "universal-counter";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { LoginResult } from "@/types";
 
 export default function LoginFormModal() {
@@ -17,6 +18,7 @@ export default function LoginFormModal() {
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const [isRemember, setIsRemember] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
     phone: "",
     password: "",
@@ -76,18 +78,17 @@ export default function LoginFormModal() {
       return;
     }
 
-    // Show loading toast
     const loadingToast = toast.loading(t("Logging in..."));
 
     formData.append("phone", phone || "");
     formData.append("password", password || "");
-    const response = await axios.post("/api/login", formData);
-    const result: LoginResult = response.data;
-    toast.dismiss(loadingToast);
 
     try {
+      const response = await axios.post("/api/login", formData);
+      const result: LoginResult = response.data;
+      toast.dismiss(loadingToast);
+
       if (result) {
-        console.log("Login result:", result);
         const code = result.code;
         const message = result.message;
 
@@ -111,9 +112,12 @@ export default function LoginFormModal() {
             setOpen(false);
             if (isRemember) {
               localStorage.setItem("phone", JSON.stringify(result.user?.phone));
-              localStorage.setItem("password", JSON.stringify(result.user?.password));
+              localStorage.setItem(
+                "password",
+                JSON.stringify(result.user?.password)
+              );
             }
-            window.location.href = "/";
+            router.push("/");
           } else {
             toast.error(t("Login failed"));
           }
@@ -122,6 +126,7 @@ export default function LoginFormModal() {
         throw new Error(t("Login failed"));
       }
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error(error instanceof Error ? error.message : t("Login failed"));
     }
   };
@@ -132,25 +137,21 @@ export default function LoginFormModal() {
     <div className="fixed inset-0 z-50 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center p-4">
       <div
         ref={modalRef}
-        className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 text-white relative"
-      >
+        className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-8 text-white relative">
         <button
           onClick={() => setOpen(false)}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-        >
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
           <svg
             className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+            xmlns="http://www.w3.org/2000/svg">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
+              d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
         <h2 className="text-4xl font-bold text-center mb-10">{t("Login")}</h2>
@@ -161,8 +162,7 @@ export default function LoginFormModal() {
                 className="w-5 h-5 text-gray-400"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
-                fill="currentColor"
-              >
+                fill="currentColor">
                 <path
                   fillRule="evenodd"
                   d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -199,8 +199,7 @@ export default function LoginFormModal() {
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}
-                >
+                  strokeWidth={2}>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -220,8 +219,7 @@ export default function LoginFormModal() {
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
-                  strokeWidth={2}
-                >
+                  strokeWidth={2}>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -266,8 +264,7 @@ export default function LoginFormModal() {
               />
               <label
                 htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-300"
-              >
+                className="ml-2 block text-sm text-gray-300">
                 {t("Remember me")}
               </label>
             </div>
@@ -276,8 +273,7 @@ export default function LoginFormModal() {
             <button
               onClick={handleLogin}
               type="button"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-md font-bold text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:ring-offset-gray-900 transition-all"
-            >
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-md font-bold text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 focus:ring-offset-gray-900 transition-all">
               LOGIN
             </button>
           </div>
