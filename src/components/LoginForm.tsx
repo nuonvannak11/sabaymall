@@ -8,7 +8,6 @@ import count from "universal-counter";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { LoginResult } from "@/types";
 
 export default function LoginFormModal() {
@@ -18,7 +17,6 @@ export default function LoginFormModal() {
   const passwordRef = React.useRef<HTMLInputElement>(null);
   const [isRemember, setIsRemember] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const router = useRouter();
   const [formData, setFormData] = React.useState({
     phone: "",
     password: "",
@@ -50,15 +48,14 @@ export default function LoginFormModal() {
     if (typeof window !== "undefined") {
       const storedPhone = localStorage.getItem("phone");
       const storedPassword = localStorage.getItem("password");
-
       setFormData({
         phone: storedPhone ? JSON.parse(storedPhone) : "",
         password: storedPassword ? JSON.parse(storedPassword) : "",
       });
+      setIsRemember(!!storedPhone && !!storedPassword);
     }
   }, []);
 
-  const togglePasswordVisibility = () => setShowPassword((v) => !v);
   const handleLogin = async () => {
     const formData = new FormData();
     const phone = phoneRef.current?.value?.trim();
@@ -117,7 +114,6 @@ export default function LoginFormModal() {
                 JSON.stringify(result.user?.password)
               );
             }
-            router.push("/");
           } else {
             toast.error(t("Login failed"));
           }
@@ -193,7 +189,7 @@ export default function LoginFormModal() {
             <div className="absolute inset-y-0 right-0 flex items-center pr-4">
               {showPassword ? (
                 <svg
-                  onClick={togglePasswordVisibility}
+                  onClick={() => setShowPassword((v) => !v)}
                   className="w-5 h-5 text-gray-400 cursor-pointer"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -213,7 +209,7 @@ export default function LoginFormModal() {
                 </svg>
               ) : (
                 <svg
-                  onClick={togglePasswordVisibility}
+                  onClick={() => setShowPassword((v) => !v)}
                   className="w-5 h-5 text-gray-400 cursor-pointer"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

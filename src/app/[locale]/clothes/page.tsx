@@ -4,8 +4,7 @@ import { sliderController } from "@/actions/controller/slider_controller";
 import Layout from "@/components/layout";
 
 export default async function ClothesPage() {
-  const products = productController.getProductByCategory("clothes");
-  const sliders = sliderController.getSliderByCategory("clothes");
-  await Promise.all([products, sliders]);
+  const products = await productController.getProductByCategory("clothes");
+  const sliders = await sliderController.getSliderByCategory("clothes");
   return <Layout products={products} sliders={sliders} />;
 }
