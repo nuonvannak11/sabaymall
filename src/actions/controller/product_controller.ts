@@ -109,6 +109,27 @@ class ProductStore {
     return this.list.find((p) => p.id === id) || null;
   }
 
+  public async searchAsync(
+    searchText: string,
+    category?: string
+  ): Promise<ProductProps[]> {
+    if (!searchText) {
+      return [];
+    }
+    await this.ensureInitialized();
+    const lowerSearch = searchText.toLowerCase();
+    if (category) {
+      return this.list.filter(
+        (p) =>
+          p.category === category && p.name.toLowerCase().includes(lowerSearch)
+      );
+    } else {
+      return this.list.filter((p) =>
+        p.name.toLowerCase().includes(lowerSearch)
+      );
+    }
+  }
+
   public async insert(
     data: Omit<ProductProps, "id" | "createdAt">
   ): Promise<ProductProps> {
