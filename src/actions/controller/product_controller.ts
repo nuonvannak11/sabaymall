@@ -30,12 +30,6 @@ class ProductStore {
     this.initialized = true;
   }
 
-  private async ensureInitialized() {
-    if (!this.initialized) {
-      await this.init();
-    }
-  }
-
   private async loadList(): Promise<void> {
     let src: string;
     try {
@@ -51,7 +45,6 @@ class ProductStore {
     if (!match) {
       throw new Error(`Invalid data file format at ${DATA_FILE}`);
     }
-
     try {
       this.list = JSON.parse(match[1]) as ProductProps[];
     } catch (jsonErr) {
@@ -69,17 +62,20 @@ class ProductStore {
     }
   }
 
-  private async persist(): Promise<void> {
+  private async persist(listSnapshot: ProductProps[]): Promise<void> {
     if (this.saving) return;
     this.saving = true;
     try {
-      const arrayLit = JSON.stringify(this.list, null, 2);
+      const arrayLit = JSON.stringify(listSnapshot, null, 2);
       const contents =
         `// GENERATED—do not edit by hand\n` +
         `export const products = ${arrayLit};\n`;
       await fs.writeFile(TMP_FILE, contents, "utf-8");
       await fs.rename(TMP_FILE, DATA_FILE);
-    } catch (err) {
+    } catch (err: any) {
+      if (isDev()) {
+        console.error("Failed to persist product store:", err);
+      }
     } finally {
       this.saving = false;
     }
@@ -88,25 +84,46 @@ class ProductStore {
   private scheduleSave() {
     if (this.saveScheduled) return;
     this.saveScheduled = true;
+
+    const snapshot = this.list.slice();
     setTimeout(async () => {
-      await this.persist();
+      await this.persist(snapshot);
       this.saveScheduled = false;
     }, this.debounceMs);
   }
 
+  private async withFreshList<T>(fn: () => T | Promise<T>): Promise<T> {
+    this.initialized = false;
+    await this.loadList();
+    console.log("Product list reloaded:", this.list.length, "items");
+    try {
+      return await fn();
+    } finally {
+      this.list = [];
+      this.initialized = false;
+    }
+  }
+
   public async getAllAsync(): Promise<ProductProps[]> {
-    await this.ensureInitialized();
-    return [...this.list];
+    return this.withFreshList(() => this.list.slice().reverse());
   }
 
   public async getProductByCategory(category: string): Promise<ProductProps[]> {
-    await this.ensureInitialized();
-    return this.list.filter((p) => p.category === category);
+    const lowerCat = category.trim().toLowerCase();
+    console.log(`Fetching products for category: ${lowerCat}`);
+    console.log("Current product list:", this.list);
+
+    return this.withFreshList(() =>
+      this.list
+        .filter((p) => p.category.trim().toLowerCase() === lowerCat)
+        .reverse()
+    );
   }
 
   public async getByIdAsync(id: number): Promise<ProductProps | null> {
-    await this.ensureInitialized();
-    return this.list.find((p) => p.id === id) || null;
+    return this.withFreshList(() =>
+      Promise.resolve(this.list.find((p) => p.id === id) || null)
+    );
   }
 
   public async searchAsync(
@@ -116,60 +133,52 @@ class ProductStore {
     if (!searchText) {
       return [];
     }
-    await this.ensureInitialized();
-    const lowerSearch = searchText.toLowerCase();
-    if (category) {
-      return this.list.filter(
-        (p) =>
-          p.category === category && p.name.toLowerCase().includes(lowerSearch)
-      );
-    } else {
-      return this.list.filter((p) =>
-        p.name.toLowerCase().includes(lowerSearch)
-      );
-    }
+    const lower = searchText.toLowerCase();
+    return this.withFreshList(() => {
+      const base = category
+        ? this.list.filter((p) => p.category === category)
+        : this.list;
+      return base.filter((p) => p.name.toLowerCase().includes(lower)).reverse();
+    });
   }
 
   public async insert(
     data: Omit<ProductProps, "id" | "createdAt">
   ): Promise<ProductProps> {
-    await this.ensureInitialized();
-    const id = getNextId(this.list);
-    const entry: ProductProps = {
-      id,
-      name: data.name,
-      category: data.category,
-      status: data.status,
-      img: data.img,
-      price: data.price,
-      total: data.total,
-      description: data.description,
-      createdAt: new Date().toISOString(),
-    };
-    this.list.push(entry);
-    this.scheduleSave();
-    return entry;
+    return this.withFreshList(async () => {
+      const id = getNextId(this.list);
+      const entry: ProductProps = {
+        ...data,
+        id,
+        createdAt: new Date().toISOString(),
+      };
+      this.list.push(entry);
+      this.scheduleSave();
+      return entry;
+    });
   }
 
   public async edit(
     id: number,
     fields: Partial<ProductProps>
   ): Promise<ProductProps | null> {
-    await this.ensureInitialized();
-    const entry = this.list.find((p) => p.id === id);
-    if (!entry) return null;
-    Object.assign(entry, fields);
-    this.scheduleSave();
-    return entry;
+    return this.withFreshList(async () => {
+      const e = this.list.find((p) => p.id === id);
+      if (!e) return null;
+      Object.assign(e, fields);
+      this.scheduleSave();
+      return e;
+    });
   }
 
   public async delete(id: number): Promise<boolean> {
-    await this.ensureInitialized();
-    const entry = this.list.find((p) => p.id === id);
-    if (!entry) return false;
-    this.list = this.list.filter((e) => e.id !== id);
-    this.scheduleSave();
-    return true;
+    return this.withFreshList(async () => {
+      const found = this.list.find((p) => p.id === id);
+      if (!found) return false;
+      this.list = this.list.filter((p) => p.id !== id);
+      this.scheduleSave();
+      return true;
+    });
   }
 }
 
